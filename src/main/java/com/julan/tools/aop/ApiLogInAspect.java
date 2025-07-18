@@ -42,14 +42,14 @@ import java.util.stream.Collectors;
 @Aspect
 @Component
 @Slf4j
-public class ApiLogAspect {
+public class ApiLogInAspect {
     private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
 
     @Resource
     protected ApiLogService apiLogService;
 
 
-    @Pointcut("@annotation(com.julan.tools.aop.ApiLog)")
+    @Pointcut("@annotation(com.julan.tools.aop.ApiLogIn)")
     public void apiLogPointcut() {
     }
 
@@ -59,7 +59,7 @@ public class ApiLogAspect {
         HttpServletRequest request = Objects.requireNonNull(attributes).getRequest();
         MethodSignature signature = (MethodSignature) joinPoint.getSignature();
         Method targetMethod = signature.getMethod();
-        ApiLog apiLog = targetMethod.getAnnotation(ApiLog.class);
+        ApiLogIn apiLog = targetMethod.getAnnotation(ApiLogIn.class);
         // 请求参数
         Object[] args = joinPoint.getArgs();
         String params = Arrays.stream(args).filter(arg -> !(arg instanceof HttpServletRequest) && !(arg instanceof HttpServletResponse)).map(arg -> {

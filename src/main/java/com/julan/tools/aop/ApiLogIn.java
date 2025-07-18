@@ -14,7 +14,7 @@ import java.lang.annotation.*;
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
-public @interface ApiLog {
+public @interface ApiLogIn {
     String value() default "接口描述信息"; // 可用于描述接口
 
     String category() default "接收";

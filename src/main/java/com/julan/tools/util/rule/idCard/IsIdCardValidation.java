@@ -46,7 +46,6 @@ public class IsIdCardValidation implements ConstraintValidator<IsIdCard, String>
         }
 
         value = value.toUpperCase();
-        log.info(value);
 
         // 格式校验
         if (!ID_CARD.matcher(value).matches()) {
@@ -76,9 +75,6 @@ public class IsIdCardValidation implements ConstraintValidator<IsIdCard, String>
         }
         int mod = sum % 11;
         char code = VALIDATE_CODES[mod];
-
-        log.info("{},{}", code, idCard);
-
         return code == idCard.charAt(17);
     }
 

@@ -7,6 +7,7 @@ import cn.hutool.json.JSONUtil;
 import com.julan.tools.aop.apiLog.apiLogIn.ApiLogIn;
 import com.julan.tools.aop.apiLog.context.ApiLogContext;
 import com.julan.tools.aop.apiLog.context.ApiLogContextHolder;
+import com.julan.tools.aop.noRepeatSubmit.NoRepeatSubmit;
 import com.julan.tools.request.validated.ValidReq;
 import com.julan.tools.util.api.ResultJson;
 import com.julan.tools.aop.apiLog.http.HttpClient;
@@ -89,6 +90,7 @@ public class ToolController {
 //    }
 
     @GetMapping("http2")
+    @NoRepeatSubmit
     public ResultJson<Object> http2() {
         ApiLogContextHolder.set(new ApiLogContext("发起请求测试接口",     // value
                 "AI接口",         // task

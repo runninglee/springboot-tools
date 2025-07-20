@@ -19,9 +19,8 @@ import java.util.Map;
 @Component
 public class HttpClient {
 
-    @ApiLogOut(enabled = true)
-    public String postJson(String url, Map<String, String> headers, String body) {
-        HttpResponse response = HttpRequest.post(url).headerMap(headers, true).body(body).execute();
-        return response.body();
+    @ApiLogOut
+    public HttpResponse post(String url, Map<String, String> headers, String body) {
+        return HttpRequest.post(url).headerMap(headers, true).body(body).execute();
     }
 }

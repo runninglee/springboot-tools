@@ -19,11 +19,10 @@ import java.util.HashMap;
  */
 @Data
 public class CreateApiLogRequest {
-    Boolean isLogged = true;
     String category = "发起";
     String task;
     String name;
-    String relType;
+    String relType = null;
     String relId = null;
     String host;
     Object header;

@@ -32,7 +32,6 @@ public class ApiLogOutAspect {
 
     @Around("@annotation(apiLogOut)")
     public Object log(ProceedingJoinPoint joinPoint, ApiLogOut apiLogOut) throws Throwable {
-        Object result;
         if (apiLogOut.enabled()) {
             ApiLogContext context = ApiLogContextHolder.get();
             CreateApiLogRequest log = new CreateApiLogRequest();
@@ -50,21 +49,18 @@ public class ApiLogOutAspect {
             if (args.length > 1) log.setHeader(JSONUtil.toJsonStr(args[1]));  // header
             if (args.length > 2) log.setBody(JSONUtil.toJsonStr(args[2]));    // body
             try {
-                result = joinPoint.proceed();
+                Object result = joinPoint.proceed();
                 log.setResponse(JSONUtil.toJsonStr(result));
             } catch (Throwable e) {
                 log.setResponse(JSONUtil.toJsonStr(new HashMap<>() {{
                     put("error", e.getMessage());
                 }}));
-                throw e;
             } finally {
                 log.setUpdatedAt(LocalDateTime.now());
                 apiLogService.createApiLog(log);
                 ApiLogContextHolder.clear();
             }
-        } else {
-            result = joinPoint.proceed();
         }
-        return result;
+        return joinPoint.proceed();
     }
 }

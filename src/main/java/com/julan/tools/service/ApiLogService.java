@@ -24,15 +24,12 @@ public class ApiLogService {
     @Resource
     private ApiLogRepository apiLogRepository;
 
-    public ApiLogEntity createApiLog(CreateApiLogRequest request) {
+    public void createApiLog(CreateApiLogRequest request) {
         ApiLogEntity apiLog = new ApiLogEntity();
-        if (request.getIsLogged()) {
-            BeanUtils.copyProperties(request, apiLog);
-            apiLog.setCreatedAt(LocalDateTime.now());
-            apiLog.setUpdatedAt(LocalDateTime.now());
-            apiLogRepository.save(apiLog);
-        }
-        return apiLog;
+        BeanUtils.copyProperties(request, apiLog);
+        apiLog.setCreatedAt(LocalDateTime.now());
+        apiLog.setUpdatedAt(LocalDateTime.now());
+        apiLogRepository.save(apiLog);
     }
 
 

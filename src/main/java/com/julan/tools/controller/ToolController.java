@@ -1,6 +1,8 @@
 package com.julan.tools.controller;
 
 import cn.hutool.core.util.IdUtil;
+import cn.hutool.http.HttpRequest;
+import cn.hutool.http.HttpResponse;
 import cn.hutool.json.JSONUtil;
 
 import com.julan.tools.aop.ApiLogIn;
@@ -24,8 +26,6 @@ import java.util.TreeMap;
 @Slf4j
 public class ToolController {
 
-    @Resource
-    private ApiLogService apiLogService;
 
     @Resource
     private HttpClient httpClient;
@@ -37,7 +37,7 @@ public class ToolController {
     }
 
     @GetMapping("hutool")
-    @ApiLogIn(value = "测试 HuTool 工具", category = "接收", task = "HuTool测试", relId = "#validReq.user.id")
+    @ApiLogIn(value = "测试 HuTool 工具", task = "HuTool测试")
     public ResultJson<Object> hutool(@Valid @RequestBody ValidReq validReq) {
         return ResultJson.success(IdUtil.objectId());
     }
@@ -93,9 +93,10 @@ public class ToolController {
     @GetMapping("http2")
     public ResultJson<Object> http2() {
         ApiLogContextHolder.set(new ApiLogContext("发起请求测试接口",     // value
-                "AI接口",        // task
+                "AI接口",         // task
                 "发起",           // category
-                null, null        // relType / relId 可选
+                null,            //relType
+                null             //relId 可选
         ));
         SortedMap<Object, Object> sortedMap = new TreeMap<>() {{
             put("attributes", "a");
@@ -104,8 +105,8 @@ public class ToolController {
         }};
         String url = "http://127.0.0.1:8191/tool/hutool";
         Map<String, String> headers = Map.of("Content-Type", "application/json");
-        String response = httpClient.postJson(url, headers, JSONUtil.toJsonStr(sortedMap));
-        return ResultJson.success(response);
+        HttpResponse response = httpClient.post(url, headers, JSONUtil.toJsonStr(sortedMap));
+        return ResultJson.success(response.body());
     }
 
 }

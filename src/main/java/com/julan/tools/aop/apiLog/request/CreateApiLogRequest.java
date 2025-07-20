@@ -1,12 +1,8 @@
-package com.julan.tools.request.apiLog;
+package com.julan.tools.aop.apiLog.request;
 
-import cn.hutool.json.JSONUtil;
 import lombok.Data;
-import org.hibernate.annotations.JdbcTypeCode;
-import org.hibernate.type.SqlTypes;
 
 import java.time.LocalDateTime;
-import java.util.HashMap;
 
 /**
  * @Project : tools

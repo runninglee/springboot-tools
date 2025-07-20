@@ -1,8 +1,8 @@
 package com.julan.tools.service;
 
+import com.julan.tools.aop.apiLog.request.CreateApiLogRequest;
 import com.julan.tools.entity.ApiLogEntity;
 import com.julan.tools.repository.apiLog.ApiLogRepository;
-import com.julan.tools.request.apiLog.CreateApiLogRequest;
 import jakarta.annotation.Resource;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Component;

@@ -48,7 +48,7 @@ public class NoRepeatSubmitAspect {
         String paramsDigest = getParamsDigest(request, joinPoint);
 
         // 生成 Redis Key
-        String key = String.format("REPEAT:%s:%s:%s", uri, ip, paramsDigest);
+        String key = String.format("nrb:%s:%s:%s", uri, ip, paramsDigest);
         int expire = noRepeatSubmit.expire();
 
         Boolean success = redisTemplate.opsForValue().setIfAbsent(key, "1", Duration.ofSeconds(expire));

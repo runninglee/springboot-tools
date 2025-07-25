@@ -9,6 +9,7 @@ import com.julan.tools.aop.apiLog.context.ApiLogContext;
 import com.julan.tools.aop.apiLog.context.ApiLogContextHolder;
 import com.julan.tools.aop.noRepeatSubmit.NoRepeatSubmit;
 import com.julan.tools.request.validated.ValidReq;
+import com.julan.tools.request.validated.ValidUniqReq;
 import com.julan.tools.util.api.ResultJson;
 import com.julan.tools.aop.apiLog.http.HttpClient;
 import jakarta.annotation.Resource;
@@ -28,6 +29,12 @@ public class ToolController {
 
     @Resource
     private HttpClient httpClient;
+
+
+    @PostMapping("valid-uniq")
+    public ResultJson<ValidUniqReq> validUniq(@Valid @RequestBody ValidUniqReq validUniqReq) {
+        return ResultJson.success(validUniqReq);
+    }
 
 
     @PostMapping("valid")

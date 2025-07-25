@@ -5,6 +5,7 @@ import jakarta.validation.ConstraintValidatorContext;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
+
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
@@ -38,25 +39,21 @@ public class IsUniqueValidation implements ConstraintValidator<IsUnique, Object>
     @Override
     public boolean isValid(Object obj, ConstraintValidatorContext context) {
         if (obj == null) return true;
-
         try {
             StringBuilder sql = new StringBuilder("SELECT COUNT(*) FROM ").append(table).append(" WHERE ");
             List<Object> params = new ArrayList<>();
-
             for (int i = 0; i < columns.length; i++) {
                 String field = columns[i];
-                Field declaredField = obj.getClass().getDeclaredField(field);
+                String fieldName = toCamel(field);
+                Field declaredField = obj.getClass().getDeclaredField(fieldName);
                 declaredField.setAccessible(true);
                 Object value = declaredField.get(obj);
-
                 sql.append(field).append(" = ?");
                 params.add(value);
-
                 if (i < columns.length - 1) {
                     sql.append(" AND ");
                 }
             }
-
             // 排除自己（更新场景）
             try {
                 Field idField = obj.getClass().getDeclaredField(id);
@@ -69,13 +66,25 @@ public class IsUniqueValidation implements ConstraintValidator<IsUnique, Object>
             } catch (NoSuchFieldException ignored) {
                 // 忽略无 id 字段
             }
-
             Integer count = jdbcTemplate.queryForObject(sql.toString(), Integer.class, params.toArray());
             return count == 0;
 
         } catch (Exception e) {
-            log.error("唯一性校验出错", e);
             return false;
         }
+    }
+
+    private String toCamel(String column) {
+        StringBuilder sb = new StringBuilder();
+        boolean upper = false;
+        for (char c : column.toCharArray()) {
+            if (c == '_') {
+                upper = true;
+            } else {
+                sb.append(upper ? Character.toUpperCase(c) : c);
+                upper = false;
+            }
+        }
+        return sb.toString();
     }
 }

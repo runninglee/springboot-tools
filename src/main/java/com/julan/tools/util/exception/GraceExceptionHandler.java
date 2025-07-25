@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.FieldError;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -13,6 +14,8 @@ import org.springframework.web.servlet.NoHandlerFoundException;
 import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @RestControllerAdvice
 @Slf4j
@@ -32,8 +35,15 @@ public class GraceExceptionHandler {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResultJson<Object> handler(MethodArgumentNotValidException e) {
-        List<FieldError> errors = e.getFieldErrors();
-        return ResultJson.validateFailed(errors.get(0).getDefaultMessage());
+        List<ObjectError> errors = e.getBindingResult().getAllErrors();
+        String message = errors.isEmpty()
+                ? "参数校验失败"
+                : errors.getFirst().getDefaultMessage(); // ✅ 获取注解中的 message，例如“身份证号已经存在”
+        return ResultJson.validateFailed(message);
+
+
+//        List<FieldError> errors = e.getFieldErrors();
+//        return ResultJson.validateFailed(errors.getFirst().getDefaultMessage());
     }
 
     @ExceptionHandler(NoHandlerFoundException.class)

@@ -55,7 +55,7 @@ public class IsUniqueValidation implements ConstraintValidator<IsUnique, Object>
                 }
             }
             // 排除自己（更新场景）
-            try {
+            if (!id.isEmpty()) {
                 Field idField = obj.getClass().getDeclaredField(id);
                 idField.setAccessible(true);
                 Object idValue = idField.get(obj);
@@ -63,9 +63,8 @@ public class IsUniqueValidation implements ConstraintValidator<IsUnique, Object>
                     sql.append(" AND ").append(id).append(" <> ?");
                     params.add(idValue);
                 }
-            } catch (NoSuchFieldException ignored) {
-                // 忽略无 id 字段
             }
+
             Integer count = jdbcTemplate.queryForObject(sql.toString(), Integer.class, params.toArray());
             return count == 0;
 
@@ -74,6 +73,9 @@ public class IsUniqueValidation implements ConstraintValidator<IsUnique, Object>
         }
     }
 
+    /**
+     * 下划线转驼峰，如 hr_account -> hrAccount
+     */
     private String toCamel(String column) {
         StringBuilder sb = new StringBuilder();
         boolean upper = false;

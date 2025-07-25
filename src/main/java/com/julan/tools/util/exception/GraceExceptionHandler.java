@@ -40,10 +40,6 @@ public class GraceExceptionHandler {
                 ? "参数校验失败"
                 : errors.getFirst().getDefaultMessage(); // ✅ 获取注解中的 message，例如“身份证号已经存在”
         return ResultJson.validateFailed(message);
-
-
-//        List<FieldError> errors = e.getFieldErrors();
-//        return ResultJson.validateFailed(errors.getFirst().getDefaultMessage());
     }
 
     @ExceptionHandler(NoHandlerFoundException.class)

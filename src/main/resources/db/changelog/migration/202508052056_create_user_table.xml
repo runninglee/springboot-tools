@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+<changeSet id="202508052056" author="Hui Lee">
+<createTable tableName="users" ifNotExists="true" remarks="用户表">
+<column name="id" autoIncrement="true" remarks="主键" type="BIGSERIAL" defaultOnNull="false">
+<constraints primaryKey="true"/>
+</column>
+<column name="username" type="VARCHAR(128)" remarks="用户名"  defaultOnNull="true"/>
+<column name="mobile" type="VARCHAR(255)" remarks="手机号" defaultOnNull="true" />
+<column name="id_card" type="VARCHAR(64)" remarks="身份证" defaultOnNull="true"/>
+<column name="created_at" type="TIMESTAMP" remarks="创建时间" defaultOnNull="true"/>
+<column name="updated_at" type="TIMESTAMP" remarks="更新时间" defaultOnNull="true"/>
+</createTable>
+</changeSet>
+</databaseChangeLog>
